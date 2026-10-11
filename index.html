@@ -1,23 +1,917 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wizbusines - Next Generation Software</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .container { max-width: 600px; padding: 20px; }
-        h1 { font-size: 3rem; margin-bottom: 10px; color: #38bdf8; }
-        p { font-size: 1.25rem; color: #94a3b8; margin-bottom: 30px; }
-        .btn { background-color: #0284c7; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 1rem; }
-        .btn:hover { background-color: #0369a1; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wizbusines — Digital product studio · Web, mobile &amp; growth</title>
+<meta name="description" content="Wizbusines is a digital product studio for startups and scale-ups. We design, build, and grow web and mobile products — plus the marketing that brings users to them.">
+<style>
+:root{
+  --bg:      oklch(99% 0.002 240);
+  --surface: oklch(100% 0 0);
+  --fg:      oklch(18% 0.012 250);
+  --muted:   oklch(54% 0.012 250);
+  --border:  oklch(92% 0.005 250);
+  --accent:  oklch(58% 0.18 255);
+  --accent-deep: oklch(44% 0.17 255);
+  --accent-soft: oklch(97% 0.015 255);
+  --success: oklch(50% 0.14 152);
+
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+
+  --wrap: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --radius: 14px;
+  --ease: cubic-bezier(.2,.6,.2,1);
+}
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--font-body);
+  font-size:16px; line-height:1.6; color:var(--fg);
+  background:var(--bg); -webkit-font-smoothing:antialiased;
+  font-variant-numeric: tabular-nums;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; cursor:pointer; }
+::selection{ background:var(--accent); color:#fff; }
+
+.wrap{ max-width:var(--wrap); margin:0 auto; padding-inline:var(--gutter); }
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:var(--font-mono); font-size:12px; font-weight:500;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--accent-deep);
+}
+h1,h2,h3{ font-family:var(--font-display); font-weight:600; line-height:1.04; letter-spacing:-0.02em; }
+.display{
+  font-size:clamp(42px, 6.4vw, 72px); line-height:1.01; letter-spacing:-0.03em;
+  font-weight:650;
+}
+.h2{ font-size:clamp(30px, 3.6vw, 46px); letter-spacing:-0.025em; }
+.h3{ font-size:20px; letter-spacing:-0.015em; }
+.lead{ font-size:clamp(17px, 1.6vw, 19px); line-height:1.55; color:var(--muted); max-width:56ch; }
+.mono{ font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em; color:var(--muted); }
+.small{ font-size:13px; letter-spacing:.01em; }
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:15px; font-weight:550; letter-spacing:.02em;
+  padding:13px 22px; border-radius:10px; border:1px solid transparent;
+  transition:transform .12s var(--ease), background .15s, border-color .15s, box-shadow .15s;
+  white-space:nowrap;
+}
+.btn:active{ transform:translateY(1px); }
+.btn-primary{ background:oklch(52% .17 255); color:#fff; box-shadow:0 1px 2px oklch(20% .04 250 / .18), 0 8px 20px oklch(52% .17 255 / .28); }
+.btn-primary:hover{ background:oklch(47% .17 255); }
+.btn-secondary{ background:var(--surface); color:var(--fg); border-color:var(--border); }
+.btn-secondary:hover{ border-color:oklch(80% .02 250); background:oklch(97% .004 240); }
+
+/* ---------- header ---------- */
+.header{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in oklab, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav{ display:flex; align-items:center; justify-content:space-between; height:68px; }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:650; font-size:17px; letter-spacing:-0.01em; }
+.logo-mark{ flex:none; }
+.nav-links{ display:flex; align-items:center; gap:28px; list-style:none; }
+.nav-links a{ font-size:14px; font-weight:550; letter-spacing:.02em; color:var(--muted); transition:color .15s; }
+.nav-links a:hover{ color:var(--fg); }
+.nav-cta{ margin-left:8px; padding:9px 16px; border-radius:8px; }
+.nav-toggle{
+  display:none; background:none; border:1px solid var(--border); border-radius:8px;
+  width:42px; height:42px; align-items:center; justify-content:center; color:var(--fg);
+}
+.nav-toggle svg{ width:20px; height:20px; }
+@media (max-width:760px){
+  .nav-links, .nav-cta{ display:none; }
+  .nav-toggle{ display:flex; }
+}
+.mobile-menu{
+  position:fixed; inset:68px 0 auto 0; z-index:49;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:12px var(--gutter) 24px; display:none;
+}
+.mobile-menu.open{ display:block; }
+.mobile-menu a{ display:block; padding:14px 4px; font-size:16px; font-weight:550; border-bottom:1px solid var(--border); }
+.mobile-menu .btn{ margin-top:18px; justify-content:center; }
+
+/* ---------- hero ---------- */
+.hero{ padding:clamp(56px, 9vw, 110px) 0 0; }
+.hero-grid{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(32px,5vw,72px); align-items:center;
+}
+.hero h1{ margin:20px 0 22px; max-width:16ch; }
+.hero h1 .acc{ color:var(--accent-deep); }
+.hero .lead{ margin-bottom:34px; }
+.hero-actions{ display:flex; flex-wrap:wrap; gap:14px; }
+.hero-status{
+  margin-top:26px; display:flex; align-items:center; gap:9px;
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.02em; color:var(--muted);
+}
+.pulse{ width:7px; height:7px; border-radius:50%; background:var(--success); box-shadow:0 0 0 0 var(--success); animation:pulse 2.2s var(--ease) infinite; }
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 color-mix(in oklab, var(--success) 55%, transparent); }
+  70%{ box-shadow:0 0 0 9px transparent; }
+  100%{ box-shadow:0 0 0 0 transparent; }
+}
+
+/* hero product mock */
+.mock{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:0 1px 0 var(--border) inset, 0 30px 60px -30px oklch(25% .05 250 / .35);
+  overflow:hidden; font-size:12px;
+}
+.mock-bar{
+  display:flex; align-items:center; gap:6px; padding:10px 14px;
+  border-bottom:1px solid var(--border);
+}
+.mock-dot{ width:9px; height:9px; border-radius:50%; background:var(--border); }
+.mock-url{
+  margin-left:12px; flex:1; max-width:260px;
+  background:var(--bg); border:1px solid var(--border); border-radius:6px;
+  padding:3px 10px; color:var(--muted); font-family:var(--font-mono); font-size:11px;
+}
+.mock-body{ display:flex; min-height:300px; }
+.mock-side{
+  width:120px; border-right:1px solid var(--border); padding:14px 12px; display:none;
+}
+@media (min-width:520px){ .mock-side{ display:block; } }
+.mock-side span{
+  display:flex; align-items:center; gap:8px; padding:6px 9px; margin-bottom:2px;
+  border-radius:6px; color:var(--muted); font-family:var(--font-mono); font-size:11px;
+}
+.mock-side .active{ color:var(--fg); background:var(--accent-soft); }
+.mock-side .glyph{ width:7px; height:7px; border-radius:2px; background:var(--border); }
+.mock-side .active .glyph{ background:var(--accent); }
+.mock-main{ flex:1; padding:18px; }
+.mock-title{ font-family:var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.mock-pill{ font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-deep); background:var(--accent-soft); padding:3px 8px; border-radius:99px; }
+.mock-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.mock-stat{ border:1px solid var(--border); border-radius:10px; padding:10px 12px; background:var(--bg); }
+.mock-stat .lbl{ font-family:var(--font-mono); font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.mock-stat .val{ font-family:var(--font-display); font-weight:650; font-size:19px; letter-spacing:-0.02em; }
+.mock-stat .chg{ font-family:var(--font-mono); font-size:10px; color:var(--success); }
+.mock-chart{ border:1px solid var(--border); border-radius:10px; padding:14px; background:var(--bg); }
+.mock-chart .row{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:.05em; }
+.bars{ display:flex; align-items:flex-end; gap:6px; height:74px; }
+.bars i{ flex:1; border-radius:4px 4px 2px 2px; background:oklch(90% .01 255); }
+.bars i.hot{ background:var(--accent); }
+.bars i.g2{ height:34%; } .bars i.g3{ height:48%; } .bars i.g4{ height:41%; }
+.bars i.g5{ height:62%; } .bars i.g6{ height:55%; } .bars i.g7{ height:78%; } .bars i.g8{ height:94%; }
+.mock-foot{ display:flex; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--border); font-family:var(--font-mono); font-size:10.5px; color:var(--muted); }
+
+/* ---------- sections ---------- */
+.section{ padding:clamp(72px, 10vw, 128px) 0; }
+.section-head{ max-width:620px; margin-bottom:clamp(40px, 6vw, 64px); }
+.section-head .eyebrow{ display:block; margin-bottom:14px; }
+.section-head .h2{ margin-bottom:16px; }
+.section-head p{ color:var(--muted); font-size:16px; max-width:54ch; }
+
+/* ---------- carousel ---------- */
+.carousel{ position:relative; }
+.c-viewport{ overflow:hidden; }
+.c-track{
+  display:flex; align-items:stretch;
+  transition:transform .55s var(--ease); will-change:transform;
+}
+.slide-item{ flex:0 0 auto; }
+
+/* ---------- products / services carousel ---------- */
+.carousel--products .slide-item{ width:100%; }
+.service{
+  background:var(--surface); display:flex; flex-direction:column;
+  position:relative; border:1px solid var(--border); border-radius:var(--radius);
+  max-width:860px; width:100%; margin:0 auto; overflow:hidden; transition:background .2s;
+}
+.service:hover{ background:oklch(98.5% .003 250); }
+.service .idx{
+  position:absolute; top:16px; right:18px; z-index:2;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.04em; color:var(--fg);
+  background:color-mix(in oklab, var(--surface) 82%, transparent);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  border:1px solid var(--border); border-radius:99px; padding:4px 10px;
+}
+.service-media{ height:clamp(180px,26vw,240px); overflow:hidden; background:var(--accent-soft); border-bottom:1px solid var(--border); }
+.service-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.service-body{ padding:clamp(26px,3vw,38px); display:flex; flex-direction:column; gap:16px; }
+.service-body svg{ width:26px; height:26px; stroke:var(--accent); }
+.service-body .h3{ margin-top:2px; }
+.service-body p{ color:var(--muted); font-size:14.5px; line-height:1.55; }
+.service-body .stack{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; }
+.service-body .stack span{ font-family:var(--font-mono); font-size:11px; letter-spacing:.02em; color:var(--muted); border:1px solid var(--border); border-radius:6px; padding:3px 8px; background:var(--bg); }
+.service-link{
+  display:inline-flex; align-items:center; gap:7px; margin-top:2px;
+  font-size:14px; font-weight:550; color:var(--accent-deep);
+}
+.service-link svg{ width:14px; height:14px; transition:transform .18s var(--ease); }
+.service-link:hover svg{ transform:translateX(3px); }
+
+/* ---------- available products ---------- */
+.prod-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+@media (max-width:760px){ .prod-grid{ grid-template-columns:1fr; } }
+.product-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:clamp(24px,3vw,30px); display:flex; flex-direction:column; gap:14px;
+  position:relative; transition:border-color .18s, transform .18s var(--ease), box-shadow .18s;
+}
+.product-card:hover{ border-color:oklch(80% .04 255); box-shadow:0 20px 44px -32px oklch(25% .06 250 / .55); transform:translateY(-2px); }
+.product-card .p-idx{ position:absolute; top:26px; right:28px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.05em; color:var(--muted); }
+.product-card .p-icon{
+  width:46px; height:46px; border-radius:12px; background:var(--accent-soft);
+  display:grid; place-items:center; color:var(--accent-deep);
+}
+.product-card .p-icon svg{ width:22px; height:22px; stroke:var(--accent); }
+.product-card h3{ font-size:19px; letter-spacing:-0.015em; }
+.product-card p{ color:var(--muted); font-size:14.5px; line-height:1.55; flex:1; }
+.product-card .p-meta{ font-family:var(--font-mono); font-size:11px; letter-spacing:.03em; color:var(--muted); }
+.product-card .p-link{
+  display:inline-flex; align-items:center; gap:7px; margin-top:6px;
+  font-size:14px; font-weight:550; color:var(--accent-deep);
+}
+.product-card .p-link svg{ width:14px; height:14px; transition:transform .18s var(--ease); }
+.product-card .p-link:hover svg{ transform:translateX(3px); }
+.prod-cta{
+  margin-top:32px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  border:1px solid var(--border); border-radius:var(--radius); background:var(--surface);
+  padding:clamp(22px,3vw,28px);
+}
+.prod-cta p{ color:var(--muted); font-size:15px; max-width:52ch; }
+.prod-cta p strong{ color:var(--fg); font-weight:600; }
+
+/* carousel controls */
+.carousel-ui{
+  margin-top:28px; display:flex; align-items:center; justify-content:center; gap:24px;
+}
+.c-arrow{
+  width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
+  background:var(--surface); color:var(--fg); display:grid; place-items:center;
+  transition:border-color .15s, color .15s, background .15s, opacity .15s;
+}
+.c-arrow:hover{ border-color:oklch(78% .03 255); color:var(--accent-deep); background:var(--bg); }
+.c-arrow:disabled{ opacity:.35; cursor:default; }
+.c-arrow:disabled:hover{ border-color:var(--border); color:var(--fg); background:var(--surface); }
+.c-arrow svg{ width:18px; height:18px; }
+.c-dots{ display:flex; gap:8px; align-items:center; }
+.c-dot{
+  width:8px; height:8px; border-radius:99px; border:none; padding:0;
+  background:var(--border); transition:width .25s var(--ease), background .2s;
+}
+.c-dot.active{ width:22px; background:var(--accent); }
+.c-dot:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* ---------- brief / process ---------- */
+.brief{ background:var(--surface); border-block:1px solid var(--border); }
+.brief-grid{ display:grid; grid-template-columns:1.35fr .65fr; gap:clamp(32px,5vw,72px); align-items:start; }
+@media (max-width:900px){ .brief-grid{ grid-template-columns:1fr; } }
+.steps{ counter-reset:step; display:flex; flex-direction:column; }
+.step{ position:relative; padding:0 0 clamp(30px,4vw,40px) 74px; }
+.step::before{
+  counter-increment:step; content:"0" counter(step);
+  position:absolute; left:0; top:0; width:44px; height:44px;
+  display:grid; place-items:center;
+  font-family:var(--font-mono); font-size:13px; letter-spacing:.03em;
+  border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--muted);
+}
+.step::after{
+  content:""; position:absolute; left:21.5px; top:48px; bottom:6px; width:1px; background:var(--border);
+}
+.step:last-child::after{ display:none; }
+.step .h3{ margin-bottom:8px; }
+.step p{ color:var(--muted); font-size:15px; max-width:52ch; }
+.brief-card{
+  border:1px solid var(--border); border-radius:var(--radius); background:var(--bg);
+  padding:clamp(24px,3vw,32px); position:sticky; top:96px;
+}
+.brief-card .eyebrow{ display:block; margin-bottom:12px; }
+.brief-card h3{ font-size:19px; margin-bottom:10px; }
+.brief-card p{ color:var(--muted); font-size:14.5px; margin-bottom:18px; }
+.brief-card ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+.brief-card li{ display:flex; gap:12px; align-items:flex-start; font-size:14.5px; font-weight:550; color:var(--fg); }
+.brief-card li svg{ flex:none; width:17px; height:17px; stroke:var(--accent); margin-top:1px; }
+@media (max-width:900px){ .brief-card{ position:static; } }
+
+/* ---------- clients carousel ---------- */
+.clients-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:clamp(30px,4vw,44px); }
+.carousel--logos .slide-item{ width:33.3333%; padding:0 7px; }
+@media (max-width:900px){ .carousel--logos .slide-item{ width:50%; } }
+@media (max-width:520px){ .carousel--logos .slide-item{ width:100%; padding:0; } }
+.logo-item{
+  background:var(--surface); padding:26px 18px; display:grid; place-items:center;
+  min-height:96px; height:100%; width:100%; color:var(--muted); transition:color .2s, background .2s;
+  font-family:var(--font-display); font-weight:600; font-size:17px; letter-spacing:-0.01em;
+  border:1px solid var(--border); border-radius:var(--radius);
+}
+.logo-item:hover{ color:var(--fg); background:oklch(98.5% .003 250); }
+.logo-item .ls{ letter-spacing:.06em; }
+.logo-item .w1{ font-weight:650; }
+.logo-item .w2{ font-weight:500; letter-spacing:.08em; text-transform:uppercase; font-size:14px; }
+.quote{
+  margin-top:clamp(36px,5vw,56px);
+  border:1px solid var(--border); border-radius:var(--radius); background:var(--surface);
+  padding:clamp(28px,4vw,44px);
+  display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start;
+}
+@media (max-width:760px){ .quote{ grid-template-columns:1fr; } }
+.quote blockquote{
+  font-family:var(--font-display); font-size:clamp(20px,2.4vw,27px); line-height:1.3; letter-spacing:-0.015em; font-weight:500; max-width:34ch;
+}
+.quote cite{ display:block; margin-top:20px; font-style:normal; font-size:14px; }
+.quote cite .name{ font-weight:600; color:var(--fg); }
+.quote cite .role{ color:var(--muted); font-family:var(--font-mono); font-size:12px; letter-spacing:.02em; }
+.quote .mark{ color:var(--accent); }
+
+/* ---------- contact ---------- */
+.contact{ background:var(--surface); border-top:1px solid var(--border); }
+.contact-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(36px,6vw,80px); align-items:start; }
+@media (max-width:900px){ .contact-grid{ grid-template-columns:1fr; } }
+.contact-info .lead{ margin:18px 0 30px; }
+.contact-lines{ list-style:none; display:flex; flex-direction:column; gap:4px; }
+.contact-lines li{ display:flex; gap:14px; align-items:center; padding:10px 0; font-size:15px; }
+.contact-lines svg{ flex:none; width:17px; height:17px; stroke:var(--accent); }
+.contact-lines .k{ font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); width:74px; flex:none; }
+.contact-lines a:hover{ color:var(--accent-deep); }
+.form{
+  background:var(--bg); border:1px solid var(--border); border-radius:var(--radius);
+  padding:clamp(24px,3vw,36px);
+}
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+.field{ margin-bottom:16px; display:flex; flex-direction:column; gap:7px; }
+.field label{ font-size:13.5px; font-weight:550; letter-spacing:.01em; }
+.field label em{ color:var(--accent-deep); font-style:normal; }
+.field input, .field select, .field textarea{
+  font:inherit; font-size:15px; color:var(--fg);
+  background:var(--surface); border:1px solid var(--border); border-radius:9px;
+  padding:12px 14px; width:100%; transition:border-color .15s, box-shadow .15s;
+  -webkit-appearance:none; appearance:none;
+}
+.field textarea{ resize:vertical; min-height:110px; }
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23808080' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 14px center; padding-right:38px;
+}
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:none; border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent);
+}
+.field .err{ display:none; font-size:12.5px; color:var(--accent-deep); }
+.field.invalid input, .field.invalid select, .field.invalid textarea{ border-color:oklch(58% .2 25); }
+.field.invalid .err{ display:block; }
+.form .btn{ width:100%; justify-content:center; margin-top:6px; }
+.form-note{ margin-top:14px; text-align:center; font-size:12.5px; color:var(--muted); }
+.form-success{ display:none; text-align:center; padding:28px 8px; }
+.form-success svg{ width:38px; height:38px; stroke:var(--success); margin:0 auto 14px; }
+.form-success .h3{ margin-bottom:8px; }
+.form-success p{ color:var(--muted); font-size:15px; }
+.form.sent form{ display:none; }
+.form.sent .form-success{ display:block; }
+
+/* ---------- footer ---------- */
+.footer{ border-top:1px solid var(--border); padding:clamp(48px,6vw,72px) 0 32px; }
+.footer-top{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr 1fr; gap:32px; margin-bottom:56px; }
+@media (max-width:900px){ .footer-top{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .footer-top{ grid-template-columns:1fr; } }
+.footer .brand p{ color:var(--muted); font-size:14px; max-width:30ch; margin-top:14px; }
+.footer h4{ font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:16px; color:var(--muted); }
+.footer ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer ul a{ font-size:14.5px; color:var(--fg); opacity:.75; transition:opacity .15s; }
+.footer ul a:hover{ opacity:1; }
+.footer-bottom{ border-top:1px solid var(--border); padding-top:22px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:.02em; color:var(--muted); }
+
+/* ---------- reveal ---------- */
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .reveal{ opacity:1; transform:none; transition:none; }
+  .pulse{ animation:none; }
+  *{ transition-duration:.01ms !important; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>wizbusines</h1>
-        <p>We are building an innovative software platform to transform your business workflows. Our private beta is launching soon.</p>
-        <a href="#" class="btn">Join the Waitlist</a>
+
+<header class="header" data-od-id="header">
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="Wizbusines — home">
+      <svg class="logo-mark" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="6" cy="18" r="2.4"/>
+        <circle cx="12" cy="6" r="2.4" fill="var(--accent)" stroke="var(--accent)"/>
+        <circle cx="18" cy="18" r="2.4"/>
+        <path d="M8.2 16.6 10.9 7.7M15.8 16.6 13.1 7.7"/>
+      </svg>
+      Wizbusines
+    </a>
+    <ul class="nav-links">
+      <li><a href="#products">Services</a></li>
+      <li><a href="#products-available">Products</a></li>
+      <li><a href="#brief">Process</a></li>
+      <li><a href="#clients">Clients</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn btn-primary nav-cta" href="#contact">Start a brief</a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu" data-od-id="mobile-menu">
+  <a href="#products">Services</a>
+  <a href="#products-available">Products</a>
+  <a href="#brief">Process</a>
+  <a href="#clients">Clients</a>
+  <a href="#contact">Contact</a>
+  <a class="btn btn-primary" href="#contact">Start a brief</a>
+</nav>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" data-od-id="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow reveal">Wizbusines — digital product studio</span>
+        <h1 class="display reveal">From brief to launch, <span class="acc">without the bloat</span></h1>
+        <p class="lead reveal">We design, build and grow web, mobile and Odoo products for startups and scale-ups — then run the marketing that brings users to them.</p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#contact">Start your brief</a>
+          <a class="btn btn-secondary" href="#brief">See how we work</a>
+        </div>
+        <p class="hero-status reveal"><span class="pulse" aria-hidden="true"></span>Now booking new briefs — next slot this quarter</p>
+      </div>
+      <div class="reveal" aria-hidden="true">
+        <div class="mock">
+          <div class="mock-bar">
+            <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+            <span class="mock-url">wizbusines.app/launch</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-side">
+              <span class="active"><i class="glyph"></i>Overview</span>
+              <span><i class="glyph"></i>Customers</span>
+              <span><i class="glyph"></i>Campaigns</span>
+              <span><i class="glyph"></i>Analytics</span>
+              <span><i class="glyph"></i>Settings</span>
+            </div>
+            <div class="mock-main">
+              <div class="mock-title">Launch overview <span class="mock-pill">Live · Q3</span></div>
+              <div class="mock-stats">
+                <div class="mock-stat"><div class="lbl">Sessions</div><div class="val">24.1k</div><div class="chg">▲ 12%</div></div>
+                <div class="mock-stat"><div class="lbl">Activation</div><div class="val">68%</div><div class="chg">▲ 4%</div></div>
+                <div class="mock-stat"><div class="lbl">Sign-ups</div><div class="val">1,940</div><div class="chg">▲ 31%</div></div>
+              </div>
+              <div class="mock-chart">
+                <div class="row"><span>Weekly sign-ups</span><span>Apr – Jun</span></div>
+                <div class="bars">
+                  <i class="g2"></i><i class="g3"></i><i class="g4"></i><i class="g5"></i><i class="g6"></i><i class="g5"></i><i class="hot g7"></i><i class="g8"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mock-foot"><span>v2.4.0 · shipping</span><span>brief → launch in 12 weeks</span></div>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- PRODUCTS / SERVICES -->
+  <section class="section" id="products" data-od-id="products">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">What we build</span>
+        <h2 class="h2">One studio, four ways to ship</h2>
+        <p>Web, mobile, marketing and Odoo under one roof — so the product, its business systems and the push behind it are never out of sync.</p>
+      </div>
+      <div class="carousel carousel--products reveal" data-od-id="products-carousel" data-autoplay="5000">
+        <div class="c-viewport">
+          <div class="c-track" data-track>
+            <div class="slide-item"><article class="service" data-od-id="service-odoo">
+              <figure class="service-media"><img src="assets/odoo-erp.jpg" alt="Team reviewing Odoo ERP implementation at a client site" loading="lazy"></figure>
+              <span class="idx">01</span>
+              <div class="service-body">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20 6.5l-8 4-8-4z"/><path d="M4 10.5l8 4 8-4"/><path d="M4 14.5l8 4 8-4"/></svg>
+                <h3 class="h3">Odoo development</h3>
+                <p>ERP and business-app implementation, customization and integration — finance, inventory, CRM and shop systems talking to each other out of the box.</p>
+                <div class="stack"><span>Odoo</span><span>Python</span><span>PostgreSQL</span><span>Integrations</span></div>
+                <a class="service-link" href="#contact">Explore Odoo work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article></div>
+            <div class="slide-item"><article class="service" data-od-id="service-web">
+              <figure class="service-media"><img src="assets/web-dev.jpg" alt="Laptop showing code during a web development sprint" loading="lazy"></figure>
+              <span class="idx">02</span>
+              <div class="service-body">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="15" rx="2.5"/><path d="M3 9h18M6.5 6.5h.01M9 6.5h.01"/>
+                </svg>
+                <h3 class="h3">Web development</h3>
+                <p>Marketing sites and web apps that are fast, measurable and easy to hand over — built to load fast and rank well.</p>
+                <div class="stack"><span>Next.js</span><span>React</span><span>Node</span><span>Tailwind</span></div>
+                <a class="service-link" href="#contact">Explore web work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article></div>
+            <div class="slide-item"><article class="service" data-od-id="service-mobile">
+              <figure class="service-media"><img src="assets/mobile-app.jpg" alt="Smartphone in hand showing an app interface" loading="lazy"></figure>
+              <span class="idx">03</span>
+              <div class="service-body">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>
+                </svg>
+                <h3 class="h3">Mobile apps</h3>
+                <p>Native-quality iOS and Android apps — from MVP to store-launch — built once and shipped to both platforms.</p>
+                <div class="stack"><span>Swift</span><span>Kotlin</span><span>Flutter</span><span>App Store</span></div>
+                <a class="service-link" href="#contact">Explore mobile work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article></div>
+            <div class="slide-item"><article class="service" data-od-id="service-marketing">
+              <figure class="service-media"><img src="assets/marketing.jpg" alt="Marketing analytics and growth reports" loading="lazy"></figure>
+              <span class="idx">04</span>
+              <div class="service-body">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 11l3 3 4-7 3 5 3-2 5 5"/><path d="M3 4v16h18"/>
+                </svg>
+                <h3 class="h3">Marketing &amp; growth</h3>
+                <p>Launch campaigns, SEO and lifecycle email that convert the interest your product earns — and tell you why.</p>
+                <div class="stack"><span>SEO</span><span>Paid media</span><span>GA4</span><span>HubSpot</span></div>
+                <a class="service-link" href="#contact">Explore growth work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article></div>
+          </div>
+        </div>
+        <div class="carousel-ui">
+          <button class="c-arrow c-arrow-prev" type="button" aria-label="Previous service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="c-dots" data-dots role="group" aria-label="Choose a service"></div>
+          <button class="c-arrow c-arrow-next" type="button" aria-label="Next service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVAILABLE PRODUCTS -->
+  <section class="section" id="products-available" data-od-id="products-available">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Available products</span>
+        <h2 class="h2">Products you can start with today</h2>
+        <p>Off-the-shelf systems, configured to your business in weeks — same build and growth standards, shorter runway.</p>
+      </div>
+      <div class="prod-grid">
+        <article class="product-card reveal" data-od-id="product-erp">
+          <span class="p-idx">01</span>
+          <span class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20 6.5l-8 4-8-4z"/><path d="M4 10.5l8 4 8-4"/><path d="M4 14.5l8 4 8-4"/></svg></span>
+          <h3 class="h3">ERP</h3>
+          <p>Finance, inventory, purchasing and manufacturing on one system — deployed to your business, not the other way around.</p>
+          <span class="p-meta">Odoo ERP · live in ~4 weeks</span>
+          <a class="p-link" href="#contact">Book a walkthrough <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="product-card reveal" data-od-id="product-whatsapp">
+          <span class="p-idx">02</span>
+          <span class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.6 0-3.1-.4-4.4-1.2L3 20l1.2-5.1A8.5 8.5 0 1 1 21 11.5z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg></span>
+          <h3 class="h3">WhatsApp CRM</h3>
+          <p>Chat with customers in the channel they already use — conversations, orders and support in one inbox, every reply logged.</p>
+          <span class="p-meta">WhatsApp Business API · per seat</span>
+          <a class="p-link" href="#contact">Book a walkthrough <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="product-card reveal" data-od-id="product-crm">
+          <span class="p-idx">03</span>
+          <span class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6.2 7v5.5L10.2 19v-7z"/></svg></span>
+          <h3 class="h3">CRM</h3>
+          <p>A sales pipeline your team will actually keep updated — leads, deals, follow-ups and reports, without a spreadsheet in sight.</p>
+          <span class="p-meta">Odoo CRM · pay per license</span>
+          <a class="p-link" href="#contact">Book a walkthrough <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="product-card reveal" data-od-id="product-foodpos">
+          <span class="p-idx">04</span>
+          <span class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 9h8M8 12.5h5"/><circle cx="16" cy="13" r="1"/></svg></span>
+          <h3 class="h3">Food POS</h3>
+          <p>Table, counter and delivery orders on one register — kitchen display, payments and stock in sync, even offline.</p>
+          <span class="p-meta">Tablets · offline mode · one setup</span>
+          <a class="p-link" href="#contact">Book a walkthrough <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+      </div>
+      <div class="prod-cta reveal">
+        <p><strong>Not sure which fits?</strong> Book a 30-minute walkthrough and we'll map the right product to your workflow.</p>
+        <a class="btn btn-secondary" href="#contact">Book a walkthrough</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIEF -->
+  <section class="section brief" id="brief" data-od-id="brief">
+    <div class="wrap brief-grid">
+      <div>
+        <span class="eyebrow reveal">The process</span>
+        <h2 class="h2 reveal" style="margin-bottom:clamp(34px,4vw,48px)">How a brief becomes a product</h2>
+        <div class="steps">
+          <div class="step reveal">
+            <h3 class="h3">Share your brief</h3>
+            <p>Twenty minutes on a call or a short doc — goal, audience, scope. That's enough to start; we dig for the rest together.</p>
+          </div>
+          <div class="step reveal">
+            <h3 class="h3">Scope and design</h3>
+            <p>A fixed roadmap with wireframes, UX and a quote you can budget around. No open-ended retainers, no surprises.</p>
+          </div>
+          <div class="step reveal">
+            <h3 class="h3">Build and ship</h3>
+            <p>Sprints with a working demo every week — you watch the product take shape instead of waiting for a big reveal.</p>
+          </div>
+          <div class="step reveal">
+            <h3 class="h3">Launch and grow</h3>
+            <p>Analytics, SEO and campaigns wired to the build, so acquisition compounds from day one, not six months later.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="brief-card reveal" data-od-id="brief-card">
+        <span class="eyebrow">Before we start</span>
+        <h3>A great brief answers three questions</h3>
+        <p>The rest we work out together — but nailing these makes the difference between a spec and a product.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg>Who is it for?</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg>What must it do on day one?</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg>What does success look like in a quarter?</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section class="section" id="clients" data-od-id="clients">
+    <div class="wrap">
+      <div class="clients-head reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <span class="eyebrow">Selected clients</span>
+          <h2 class="h2">Trusted by teams that ship</h2>
+        </div>
+        <p class="lead" style="max-width:38ch">From seed-stage MVPs to scale-ups with real users — product and growth work, back to back.</p>
+      </div>
+      <div class="carousel carousel--logos reveal" data-od-id="clients-carousel" data-autoplay="4500">
+        <div class="c-viewport">
+          <div class="c-track" data-track>
+            <div class="slide-item"><span class="logo-item w1">Northwind</span></div>
+            <div class="slide-item"><span class="logo-item"><span class="ls">FATHOM</span></span></div>
+            <div class="slide-item"><span class="logo-item w2">KITE&nbsp;&amp;&nbsp;CO</span></div>
+            <div class="slide-item"><span class="logo-item w1">Loopwork</span></div>
+            <div class="slide-item"><span class="logo-item"><span class="ls">BRAMBLE</span></span></div>
+            <div class="slide-item"><span class="logo-item w2">halcyon</span></div>
+          </div>
+        </div>
+        <div class="carousel-ui">
+          <button class="c-arrow c-arrow-prev" type="button" aria-label="Previous clients">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="c-dots" data-dots role="group" aria-label="Browse clients"></div>
+          <button class="c-arrow c-arrow-next" type="button" aria-label="Next clients">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <figure class="quote reveal" data-od-id="quote-primary">
+        <div>
+          <blockquote>Wizbusines took our MVP brief and shipped a product our customers actually use. Six weeks, zero drama — then they built the launch campaign for it.”</blockquote>
+          <cite><span class="name">Mara Chen</span><br><span class="role">Co-founder &amp; CTO — Fathom</span></cite>
+        </div>
+        <svg class="mark" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 10c0-3 2-5 5-6l1 2c-2 1-3 2.5-3 4.5H11V18H4v-8zM13 10c0-3 2-5 5-6l1 2c-2 1-3 2.5-3 4.5H20V18h-7v-8z"/></svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact" id="contact" data-od-id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-info reveal">
+        <span class="eyebrow">Contact</span>
+        <h2 class="h2" style="margin-top:14px">Tell us what you're building</h2>
+        <p class="lead">Send the brief — or just a rough idea. We reply within one business day with a first read and next steps.</p>
+        <ul class="contact-lines">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg><span class="k">Email</span><a href="mailto:info@wizbusines.com">info@wizbusines.com</a></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span class="k">Based</span><span>Remote-first · AMS / LDN / NYC</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span class="k">Reply</span><span>Within one business day</span></li>
+        </ul>
+      </div>
+      <form class="form reveal" id="brief-form" data-od-id="brief-form" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-name">Your name <em>*</em></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ada Lovelace" required>
+            <span class="err">Please add your name.</span>
+          </div>
+          <div class="field">
+            <label for="f-email">Work email <em>*</em></label>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="ada@company.com" required>
+            <span class="err">Please add a valid email.</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-type">Project type</label>
+            <select id="f-type" name="type">
+              <option>Web development</option>
+              <option>Odoo development</option>
+              <option>Mobile app</option>
+              <option>Marketing &amp; growth</option>
+              <option>Full product — web + mobile + growth</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-budget">Budget range</label>
+            <select id="f-budget" name="budget">
+              <option>Under $15k</option>
+              <option>$15k – $40k</option>
+              <option>$40k – $100k</option>
+              <option>$100k+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-msg">Your brief <em>*</em></label>
+          <textarea id="f-msg" name="message" placeholder="The product, the audience, what success looks like — a few lines is fine." required></textarea>
+          <span class="err">A sentence or two helps us reply properly.</span>
+        </div>
+        <button class="btn btn-primary" type="submit">Send the brief</button>
+        <p class="form-note">No retainer talk, no spam — just a direct answer.</p>
+        <div class="form-success" aria-live="polite">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg>
+          <h3 class="h3">Brief received</h3>
+          <p>Thanks — we'll reply within one business day. Keep an eye on your inbox.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" data-od-id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="brand">
+        <a class="logo" href="#top">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="18" r="2.4"/><circle cx="12" cy="6" r="2.4" fill="var(--accent)" stroke="var(--accent)"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 16.6 10.9 7.7M15.8 16.6 13.1 7.7"/>
+          </svg>
+          Wizbusines
+        </a>
+        <p>Digital product studio. We take software from brief to launch — then help it grow.</p>
+      </div>
+      <div>
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#brief">Process</a></li>
+          <li><a href="#clients">Clients</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#products">Web development</a></li>
+          <li><a href="#products">Mobile apps</a></li>
+          <li><a href="#products">Odoo development</a></li>
+          <li><a href="#products">Marketing &amp; growth</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#products-available">ERP</a></li>
+          <li><a href="#products-available">WhatsApp CRM</a></li>
+          <li><a href="#products-available">CRM</a></li>
+          <li><a href="#products-available">Food POS</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Elsewhere</h4>
+        <ul>
+          <li><a href="mailto:info@wizbusines.com">Email</a></li>
+          <li><a href="#top">LinkedIn</a></li>
+          <li><a href="#top">X / Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Wizbusines Studio</span>
+      <span>Brief → launch → growth</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle=document.querySelector('.nav-toggle');
+  var menu=document.getElementById('mobile-menu');
+  if(toggle&&menu){
+    toggle.addEventListener('click',function(){
+      var open=menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded',open?'true':'false');
+    });
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){ menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    });
+  }
+
+  var revealEls=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }else{
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  document.querySelectorAll('.carousel').forEach(function(root){
+    var track=root.querySelector('[data-track]');
+    if(!track) return;
+    var slides=track.children;
+    var dotsWrap=root.querySelector('[data-dots]');
+    var prev=root.querySelector('.c-arrow-prev');
+    var next=root.querySelector('.c-arrow-next');
+    var idx=0, pv=1;
+
+    function perView(){
+      var w=window.innerWidth;
+      if(root.classList.contains('carousel--logos')){
+        if(w<=520) return 1;
+        if(w<=900) return 2;
+        return 3;
+      }
+      return 1;
+    }
+    function maxI(){ return Math.max(0, slides.length - pv); }
+
+    var timer=null;
+    var auto=parseInt(root.getAttribute('data-autoplay')||'0',10);
+    var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+    function restart(){ stop(); if(!auto||reduced) return; timer=setInterval(function(){ idx=(idx>=maxI()?0:idx+1); paint(); },auto); }
+
+    function paint(){
+      pv=perView();
+      var mx=maxI();
+      if(idx>mx) idx=mx;
+      track.style.transform='translateX(-'+(idx*(100/pv))+'%)';
+      if(dotsWrap){
+        dotsWrap.innerHTML='';
+        for(var d=0;d<=mx;d++){
+          (function(d){
+            var b=document.createElement('button');
+            b.type='button';
+            b.className='c-dot'+(d===idx?' active':'');
+            b.setAttribute('aria-label','Go to slide '+(d+1));
+            b.addEventListener('click',function(){ idx=d; paint(); restart(); });
+            dotsWrap.appendChild(b);
+          })(d);
+        }
+      }
+      if(prev) prev.disabled=(idx<=0);
+      if(next) next.disabled=(idx>=mx);
+    }
+    if(prev) prev.addEventListener('click',function(){ if(idx>0){ idx--; paint(); restart(); } });
+    if(next) next.addEventListener('click',function(){ if(idx<maxI()){ idx++; paint(); restart(); } });
+    root.addEventListener('mouseenter',stop);
+    root.addEventListener('mouseleave',restart);
+    root.addEventListener('focusin',stop);
+    root.addEventListener('focusout',restart);
+    window.addEventListener('resize',paint);
+    paint();
+    restart();
+  });
+
+  var form=document.getElementById('brief-form');
+  if(form){
+    var fields=[].slice.call(form.querySelectorAll('.field'));
+    function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+    function checkField(f){
+      var input=f.querySelector('input,select,textarea');
+      var ok=true;
+      if(input.hasAttribute('required')&&!input.value.trim()) ok=false;
+      if(ok&&input.type==='email'&&!validEmail(input.value.trim())) ok=false;
+      f.classList.toggle('invalid',!ok);
+      return ok;
+    }
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var all=fields.map(checkField);
+      if(all.every(Boolean)){ form.classList.add('sent'); }
+    });
+    fields.forEach(function(f){
+      var input=f.querySelector('input,select,textarea');
+      input.addEventListener('input',function(){ f.classList.remove('invalid'); });
+      input.addEventListener('change',function(){ checkField(f); });
+    });
+  }
+})();
+</script>
 </body>
 </html>
